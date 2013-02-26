@@ -1,0 +1,183 @@
+/* 
+	Resets defualt browser settings
+	reset.css
+*/
+/*@import url('http://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css');*/
+
+
+html,body,div,span,applet,object,iframe,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td { margin:0; padding:0; border:0; outline:0; font-weight:inherit; font-style:inherit; font-size:100%; font-family:inherit; vertical-align:baseline; }
+:focus { outline:0; }
+a:active { outline:none; }
+body { line-height:1; color:black; background:white; }
+ol,ul { 
+	line-height: 1.35em;}
+table { border-collapse:separate; border-spacing:0; }
+caption,th,td { text-align:left; }
+blockquote:before,blockquote:after,q:before,q:after { content:""; }
+blockquote,q { quotes:"" ""; }
+
+/*
+	Page style
+*/
+
+body {
+	font-family: "Roboto", Arial, sans-serif;
+	font-weight: 300;
+	color: rgba(51,51,51,0.6);
+}
+
+ul {
+	list-style: none;
+}
+
+p {
+	margin: 0;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight: 100;
+	margin-bottom: 10px;
+}
+
+hr {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border-bottom: 0;
+}
+
+#profile {
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 20px;
+	width: 250px;
+	height: 100%;
+	border-right: 1px solid #e3e3e3;
+	background-color: #fff;
+	z-index: 10;
+	text-align: center;
+	font-weight: 100;
+}
+
+#profile #thumbnail {
+	/*margin: 0 auto;*/
+	/*display: block;*/
+}
+
+#profile p {
+	margin-top: 5px;
+	margin-bottom: 15px;
+	color: #666;
+	font-size: 18px;
+}
+
+#content {
+	margin-left: 291px;
+	min-width: 680px;
+}
+
+#content header {
+	height: 45px;
+	border-bottom: 1px solid #e3e3e3;
+	font-size: 28px;
+	font-weight: 100;
+}
+
+#content nav {
+	padding-top: 10px;
+	margin: 0 auto;
+	width: 640px;
+}
+
+#content h1 {
+	margin-top: 10px;
+	margin-left: 30px;
+}
+
+#content .item .text {
+	width: 100%;
+	font-size: 24px;
+	font-weight: 100;
+	text-align: center;
+}
+
+#frame {
+	margin: 0 auto;
+	margin-top: 20px;
+
+	font-family: "Roboto";
+	color: rgba(255, 255, 255, 0.6);
+	font-weight: 100;
+	font-size: 14px;
+
+	width: 640px;
+	height: 480px;
+	position: relative;
+	background-image: url('../img/food.jpg');
+	background-repeat: no-repeat;
+	margin-bottom: 25px;
+
+	box-shadow: 0px 1px 6px #999;
+}
+
+#glassbox {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	width: 200px;
+	height: 100px;
+	background-color: rgba(0, 0, 0, 0.7);
+	padding: 10px;
+	overflow: hidden;
+}
+
+#okglass {
+	position: absolute;
+	display: inline-block;
+}
+
+#glassactions {
+	position: absolute;
+	display: inline-block;
+	padding-left: 60px;
+}
+
+#glassactions li {
+	position: relative;
+}
+
+#actioncontent {
+	position: absolute;
+	top: 140px;
+	width: 200px;
+}
+
+#actioncontent > * {
+	position: relative;
+}
+
+.title {
+	text-align: left;
+}
+
+.value {
+	text-align: right;
+	font-size: 18px;
+	font-weight: 100;
+}
+
+#playbutton {
+	position: absolute;
+	top: 35px;
+	left: 85px;
+	background-image: url('../img/play-button.png');
+	/*background-image: url('../img/loading.gif');*/
+	background-size: 50px 50px;
+	width: 50px;
+	height: 50px;
+	opacity: 0;
+}
+
+#playbutton:hover {
+	background-image: url('../img/play-button-over.png');
+}

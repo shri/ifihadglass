@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>If I had glass</title>
+    <meta name="author" content="Yang Shun Tay">
+    <meta name="copyright" content="Copyright Yang Shun Tay 2013. All Rights Reserved.">
+    <meta name="description" content="If I had glass...">
+    <!-- Facebook Open Graph -->
+    <meta property="og:title" content="If I had glass">
+    <meta property="og:description" content="">
+    <meta property="og:site_name" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="">
+    <link href="https://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css" rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:200,400,600" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,500" rel="stylesheet" type="text/css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+
+		var currCont;
+		var CONTENT_SHIFT_DIST = 400;
+		var ANIMATION_DURATION = 200;
+		var DELAY_INTERVAL = 75;
+		var PAUSE_BEFORE_ACTION_SELECTION = 500;
+		var FADE_OUT_DURATION_BEFORE_ACTION_CONTENT = 300;
+		var PAUSE_BEFORE_ACTION_SELECTION_FADE = 300;
+		var PAUSE_BEFORE_ACTION_CONTENT = 400;
+		var PAUSE_BEFORE_PLAY_BUTTON = 1000;
+
+		var GLASS_BOX_ORIG_TOP = '10px';
+		var ACTION_CONTENT_ORIG_TOP = '140px';
+
+		var delay = 0;
+		$(document).ready(function() {
+			// setUpNavigationEffects();
+			// hideNonActiveContent();
+			// setUpJudgesHover();
+			initGlassbox();
+
+			$('#playbutton').hover(); // to trigger loading of the hover image
+			okGlass();
+		});
+
+		var initGlassbox = function() {
+			$('#okglass').css('top', GLASS_BOX_ORIG_TOP);
+			$('#okglass').css('opacity', 1);
+			$('#glassactions').css('opacity', 1);
+			$('#actioncontent').css('top', ACTION_CONTENT_ORIG_TOP);
+			$('#actioncontent').css('opacity', 1);
+		};
+
+		var okGlass = function() {
+			$('#okglass').css('top', '70px');
+			$('#okglass').css('opacity', 0);
+			$('#glassactions').find('li').css('top', '50px');
+			$('#glassactions').find('li').css('opacity', 0);
+			$('#okglass').animate({ 
+				'top': GLASS_BOX_ORIG_TOP,
+				'opacity': 1,
+				}, ANIMATION_DURATION, function() {
+					
+				});
+			delay = 0;
+			$('#glassactions li').delay(100).each(function() {
+				$(this).delay(delay).animate({ 
+					'top': '0px',
+					'opacity': 1}, 
+					ANIMATION_DURATION, 
+					function() {
+						if ($(this).is(':last-child')) {
+							setTimeout(function() {
+								$('#glassactions li').each(function() {
+									if (!$(this).is(':last-child')) {
+										$(this).animate({'opacity': 0}, 100, function() {
+										});
+									} else {
+										var offset = ($('#glassactions ul').children().length - 1) * $(this).height();
+										var finalPos = '-' + offset + 'px';
+										$(this).animate({
+											'top': finalPos
+										}, ANIMATION_DURATION, function() {
+											var $el = $(this);
+											setTimeout(function() {
+												$el.animate({'opacity': 0},FADE_OUT_DURATION_BEFORE_ACTION_CONTENT);
+												$('#okglass').animate({'opacity': 0},FADE_OUT_DURATION_BEFORE_ACTION_CONTENT);
+												setTimeout(function() {showContent()}, PAUSE_BEFORE_ACTION_CONTENT);
+											}, PAUSE_BEFORE_ACTION_SELECTION_FADE);
+										});
+									}
+								});
+							}, PAUSE_BEFORE_ACTION_SELECTION);
+						}
+				});
+				delay += DELAY_INTERVAL;
+			});
+		}
+		
+		var showContent = function() {
+			$('#actioncontent').children().each(function() {
+											$(this).css('opacity', 0);
+											$(this).css('top', '180px');
+										});
+
+			$('#actioncontent').css('top', '0px');
+			delay = 0;
+			$('#actioncontent').children().each(function() {
+				$(this).delay(delay).animate({
+					'top': '10px',
+					'opacity': 1
+				}, ANIMATION_DURATION, function() {
+					if ($(this).is(':last-child')) {
+						showPlayButton();
+					}
+				});
+				delay += DELAY_INTERVAL * 2;
+			});
+		};
+
+		var showPlayButton = function() {
+				setTimeout(
+					function() {
+						$('#actioncontent').animate({
+							'opacity': 0.5,
+						}, ANIMATION_DURATION);
+						$('#playbutton').animate({
+							'opacity': 1
+						}, ANIMATION_DURATION);
+					}
+				, PAUSE_BEFORE_PLAY_BUTTON);
+			
+		}
+
+		var repeatAnimation = function() {
+			$('#playbutton').css('opacity', 0);
+			initGlassbox();
+			okGlass();
+		}
+		// var setUpNavigationEffects = function () {
+		// 	$('.navigation > ul > li').hover(function () {
+		// 		if ($(this).children().hasClass('active')) {
+		// 			return;
+		// 		}
+		// 		$(this).css('padding-right', '10px');
+		// 	}, function() {
+		// 		$(this).css('padding-right', '0px');
+		// 	});
+		// };
+
+		// var hideNonActiveContent = function () {
+		// 	$('#navigation > ul > li').each(function () {
+		// 		var $a = $(this).children();
+		// 		var name = $a.attr('name');
+		// 		$a.click(function () {
+		// 			showContent(name);
+		// 		});
+		// 		// $a.click(showContent(name));
+		// 		// alert(name);
+		// 		if ($a.hasClass('active')) {
+		// 			currCont = name;
+		// 			return;
+		// 		} else {
+		// 			$content = $('#'+name);
+		// 			$content.css('opacity', 0);
+		// 			$content.css('display', 'none');
+		// 		}
+		// 	});
+		// };
+
+		// var showContent = function(cont) {
+		// 	if (cont == currCont) {
+		// 		return;
+		// 	}
+		// 	// $('body').animate({ scrollTop: 0 }, 300, function() {
+		// 	// 		console.log('scroll');
+		// 	// 		animateContent(cont);
+		// 		// });
+
+		// 	if ($('body').scrollTop() > 50) {
+		// 		$('body').animate({ scrollTop: 0, scrollLeft: 0 }, 300, function() {
+		// 			console.log('scroll');
+		// 			animateContent(cont);
+		// 		});
+		// 	} else {
+		// 		animateContent(cont);
+		// 	}
+		// };
+
+		// var animateContent = function(cont) {
+		// 	$currCont = $('#' + currCont);
+		// 	$currCont.animate({'left': CONTENT_SHIFT_DIST + 'px',
+		// 							'opacity': 0.0}, ANIMATION_DURATION, function() {
+		// 								$currCont.css('display', 'none');
+		// 							});
+		// 	$cont = $('#' + cont);
+		// 	$cont.css('left', CONTENT_SHIFT_DIST + 'px');
+		// 	$cont.css('display', 'inline');
+		// 	$cont.animate({'left':'0px',
+		// 					'opacity': 1.0}, ANIMATION_DURATION);
+		// 	$('[name=' + currCont + ']').toggleClass('active');
+		// 	$('[name=' + cont + ']').toggleClass('active');
+		// 	currCont = cont;
+		// }
+
+		// var setUpJudgesHover = function() {
+		// 	$("#judges .judge-hover").hover(function() {
+		// 		$('#judges').find("div[class^=judge-writeup-]").css('display', 'none');
+		// 		var name = $(this).attr('data-judge');
+		// 		$('#judges').find("div[class^=judge-writeup-" + name + "]").css('display', 'inline-block');
+		// 	});
+		// }
+
+	</script>
+ 
+</head>
+<body>
+	<div id="profile">
+		<img id="thumbnail" src="img/thumb-ys.png" width="150"/>
+		<h2>Yang Shun Tay</h2>
+		<p>Design Hacker</p>
+		<hr>
+	</div>
+	<div id="content">
+		<header><nav>#ifihadglass</nav></header>
+		<div id="item-1" class="item">
+			<div id="frame">
+				<div id="glassbox">
+					<div id="okglass">
+						<ul>
+							<li>ok glass,</li>
+						</ul>
+					</div>
+					<div id="glassactions">
+						<ul>
+							<li>google...</li>
+							<li>take a picture</li>
+							<li>record a video</li>
+							<li>hang out with...</li>
+							<li>record calories</li>
+						</ul>
+					</div>
+					<div id="actioncontent">
+						<p class="title">Bento Box (2 items)</p>
+						<div style="height: 40px;">&nbsp;</div>
+						<p class="value">+680</p>
+						<hr>
+						<p class><span class="title" style="float:left">Calorie intake today:</span><span class="value" style="float:right">982</span></p>
+					</div>
+					<a id="playbutton" href="#" onclick="repeatAnimation()"></a>
+				</div>
+			</div>
+			<div class="text">
+				<p>Counting calories has never been easier.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
