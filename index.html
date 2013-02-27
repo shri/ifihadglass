@@ -20,7 +20,9 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript">
 
-		var currCont;
+		var currFrame;
+		var numberOfFrames;
+
 		var CONTENT_SHIFT_DIST = 400;
 		var ANIMATION_DURATION = 200;
 		var DELAY_INTERVAL = 75;
@@ -33,38 +35,51 @@
 		var GLASS_BOX_ORIG_TOP = '10px';
 		var ACTION_CONTENT_ORIG_TOP = '140px';
 
+		var TRANSITION_DURATION = 600;
+		var TRANSITION_OFFSET = '900px';
+		var TRANSITION_BUTTON_FADE_DURATION = 200;
+
 		var delay = 0;
 		$(document).ready(function() {
 			// setUpNavigationEffects();
 			// hideNonActiveContent();
 			// setUpJudgesHover();
+			currIndex = 1;
+			currFrame = '#frame-1 ';
+			numberOfFrames = $('.frame').size();
 			initGlassbox();
-
-			$('#playbutton').hover(); // to trigger loading of the hover image
-			okGlass();
+			setupFrames();
+			$('.playbutton').hover();
+			$(currFrame + '.repeatbutton').hover(); // to trigger loading of the hover image
+			// okGlass();
 		});
 
-		var initGlassbox = function() {
-			$('#okglass').css('top', GLASS_BOX_ORIG_TOP);
-			$('#okglass').css('opacity', 1);
-			$('#glassactions').css('opacity', 1);
-			$('#actioncontent').css('top', ACTION_CONTENT_ORIG_TOP);
-			$('#actioncontent').css('opacity', 1);
+		var initGlassbox = function(frame) {
+			if (!frame) {
+				frame = currFrame;
+			}
+
+			$(frame + '.repeatbutton').css('opacity', 0);
+			$(frame + '.okglass').css('top', '70px');
+			$(frame + '.okglass').css('opacity', 0);
+			$(frame + '.glassactions').find('li').css('opacity', 0);
+			$(frame + '.actioncontent').css('top', ACTION_CONTENT_ORIG_TOP);
+			$(frame + '.actioncontent').css('opacity', 1);
 		};
 
 		var okGlass = function() {
-			$('#okglass').css('top', '70px');
-			$('#okglass').css('opacity', 0);
-			$('#glassactions').find('li').css('top', '50px');
-			$('#glassactions').find('li').css('opacity', 0);
-			$('#okglass').animate({ 
+			$(currFrame + '.okglass').css('top', '70px');
+			$(currFrame + '.okglass').css('opacity', 0);
+			$(currFrame + '.glassactions').find('li').css('top', '50px');
+			$(currFrame + '.glassactions').find('li').css('opacity', 0);
+			$(currFrame + '.okglass').animate({ 
 				'top': GLASS_BOX_ORIG_TOP,
 				'opacity': 1,
 				}, ANIMATION_DURATION, function() {
 					
 				});
 			delay = 0;
-			$('#glassactions li').delay(100).each(function() {
+			$(currFrame + '.glassactions li').delay(100).each(function() {
 				$(this).delay(delay).animate({ 
 					'top': '0px',
 					'opacity': 1}, 
@@ -72,12 +87,12 @@
 					function() {
 						if ($(this).is(':last-child')) {
 							setTimeout(function() {
-								$('#glassactions li').each(function() {
+								$(currFrame + '.glassactions li').each(function() {
 									if (!$(this).is(':last-child')) {
 										$(this).animate({'opacity': 0}, 100, function() {
 										});
 									} else {
-										var offset = ($('#glassactions ul').children().length - 1) * $(this).height();
+										var offset = ($(currFrame + '.glassactions ul').children().length - 1) * $(this).height();
 										var finalPos = '-' + offset + 'px';
 										$(this).animate({
 											'top': finalPos
@@ -85,7 +100,7 @@
 											var $el = $(this);
 											setTimeout(function() {
 												$el.animate({'opacity': 0},FADE_OUT_DURATION_BEFORE_ACTION_CONTENT);
-												$('#okglass').animate({'opacity': 0},FADE_OUT_DURATION_BEFORE_ACTION_CONTENT);
+												$(currFrame + '.okglass').animate({'opacity': 0},FADE_OUT_DURATION_BEFORE_ACTION_CONTENT);
 												setTimeout(function() {showContent()}, PAUSE_BEFORE_ACTION_CONTENT);
 											}, PAUSE_BEFORE_ACTION_SELECTION_FADE);
 										});
@@ -99,118 +114,137 @@
 		}
 		
 		var showContent = function() {
-			$('#actioncontent').children().each(function() {
+			$(currFrame + '.actioncontent').children().each(function() {
 											$(this).css('opacity', 0);
 											$(this).css('top', '180px');
 										});
 
-			$('#actioncontent').css('top', '0px');
+			$(currFrame + '.actioncontent').css('top', '0px');
 			delay = 0;
-			$('#actioncontent').children().each(function() {
+			$(currFrame + '.actioncontent').children().each(function() {
 				$(this).delay(delay).animate({
 					'top': '10px',
-					'opacity': 1
+					'opacity': 1,
 				}, ANIMATION_DURATION, function() {
 					if ($(this).is(':last-child')) {
-						showPlayButton();
+						showRepeatButton();
 					}
 				});
 				delay += DELAY_INTERVAL * 2;
 			});
 		};
 
-		var showPlayButton = function() {
+		var showRepeatButton = function() {
 				setTimeout(
 					function() {
-						$('#actioncontent').animate({
+						$(currFrame + '.actioncontent').animate({
 							'opacity': 0.5,
 						}, ANIMATION_DURATION);
-						$('#playbutton').animate({
+						$(currFrame + '.repeatbutton').animate({
 							'opacity': 1
 						}, ANIMATION_DURATION);
+						showTransitionButtons();
 					}
 				, PAUSE_BEFORE_PLAY_BUTTON);
 			
 		}
 
 		var repeatAnimation = function() {
-			$('#playbutton').css('opacity', 0);
 			initGlassbox();
 			okGlass();
+			hideTransitionButtons();
 		}
-		// var setUpNavigationEffects = function () {
-		// 	$('.navigation > ul > li').hover(function () {
-		// 		if ($(this).children().hasClass('active')) {
-		// 			return;
-		// 		}
-		// 		$(this).css('padding-right', '10px');
-		// 	}, function() {
-		// 		$(this).css('padding-right', '0px');
-		// 	});
-		// };
 
-		// var hideNonActiveContent = function () {
-		// 	$('#navigation > ul > li').each(function () {
-		// 		var $a = $(this).children();
-		// 		var name = $a.attr('name');
-		// 		$a.click(function () {
-		// 			showContent(name);
-		// 		});
-		// 		// $a.click(showContent(name));
-		// 		// alert(name);
-		// 		if ($a.hasClass('active')) {
-		// 			currCont = name;
-		// 			return;
-		// 		} else {
-		// 			$content = $('#'+name);
-		// 			$content.css('opacity', 0);
-		// 			$content.css('display', 'none');
-		// 		}
-		// 	});
-		// };
+		// transition related methods
 
-		// var showContent = function(cont) {
-		// 	if (cont == currCont) {
-		// 		return;
-		// 	}
-		// 	// $('body').animate({ scrollTop: 0 }, 300, function() {
-		// 	// 		console.log('scroll');
-		// 	// 		animateContent(cont);
-		// 		// });
+		var startAnimation = function() {
+			$('.overlay').fadeOut(500, function() {
+				showCurrentCaption(currFrame);
+				okGlass();
+			});
+		}
 
-		// 	if ($('body').scrollTop() > 50) {
-		// 		$('body').animate({ scrollTop: 0, scrollLeft: 0 }, 300, function() {
-		// 			console.log('scroll');
-		// 			animateContent(cont);
-		// 		});
-		// 	} else {
-		// 		animateContent(cont);
-		// 	}
-		// };
+		var setupFrames = function() {
+			$('#canvas').find('div.frame').each(function () {
+				if (!$(this).is(':first-child')) {
+					$(this).css('left', '640px');
+					$(this).css('opacity', 0);
+					$(this).css('display', 'none');
+				}
+			});
+			$('#canvas .text span').fadeOut(0);
+			$("#prevbutton").fadeOut(0);	
+			$("#nextbutton").fadeOut(0);
+		}
 
-		// var animateContent = function(cont) {
-		// 	$currCont = $('#' + currCont);
-		// 	$currCont.animate({'left': CONTENT_SHIFT_DIST + 'px',
-		// 							'opacity': 0.0}, ANIMATION_DURATION, function() {
-		// 								$currCont.css('display', 'none');
-		// 							});
-		// 	$cont = $('#' + cont);
-		// 	$cont.css('left', CONTENT_SHIFT_DIST + 'px');
-		// 	$cont.css('display', 'inline');
-		// 	$cont.animate({'left':'0px',
-		// 					'opacity': 1.0}, ANIMATION_DURATION);
-		// 	$('[name=' + currCont + ']').toggleClass('active');
-		// 	$('[name=' + cont + ']').toggleClass('active');
-		// 	currCont = cont;
-		// }
+		var showTransitionButtons = function() {
+			if (currIndex == numberOfFrames) {
+				$("#prevbutton").fadeIn(TRANSITION_BUTTON_FADE_DURATION);
+			} else if (currIndex == 1) {
+				$("#nextbutton").fadeIn(TRANSITION_BUTTON_FADE_DURATION);
+			} else {
+				$("#prevbutton").fadeIn(TRANSITION_BUTTON_FADE_DURATION);	
+				$("#nextbutton").fadeIn(TRANSITION_BUTTON_FADE_DURATION);
+			}
+		}
 
-		// var setUpJudgesHover = function() {
-		// 	$("#judges .judge-hover").hover(function() {
-		// 		$('#judges').find("div[class^=judge-writeup-]").css('display', 'none');
-		// 		var name = $(this).attr('data-judge');
-		// 		$('#judges').find("div[class^=judge-writeup-" + name + "]").css('display', 'inline-block');
-		// 	});
-		// }
+		var hideTransitionButtons = function() {
+			$("#prevbutton").fadeOut(TRANSITION_BUTTON_FADE_DURATION);	
+			$("#nextbutton").fadeOut(TRANSITION_BUTTON_FADE_DURATION);
+		}
+
+		var showCurrentCaption = function(frame) {
+			$('#canvas .text span').fadeOut(TRANSITION_BUTTON_FADE_DURATION, 
+				function() {
+					$(this).html($(frame + 'span.caption').html());
+					$(this).fadeIn(TRANSITION_BUTTON_FADE_DURATION);
+				});
+		}
+
+		var next = function() {
+			currIndex++;
+			hideTransitionButtons();
+			var nextFrame = '#frame-' + currIndex;
+			showCurrentCaption(nextFrame + ' ');
+			$(currFrame).animate({
+				'opacity' : 0,
+				'left' : '-' + TRANSITION_OFFSET,
+			}, TRANSITION_DURATION, function() {
+				$(this).css('display', 'none');
+			});
+			$(nextFrame).css('display', 'block');
+			initGlassbox(nextFrame + ' ');
+			$(nextFrame).animate({
+				'opacity' : 1,
+				'left' : '0px',
+			}, TRANSITION_DURATION, function() {
+				currFrame = nextFrame + ' ';
+				repeatAnimation();
+			});
+
+		}
+
+		var prev = function() {
+			currIndex--;
+			hideTransitionButtons();
+			var prevFrame = '#frame-' + currIndex;
+			showCurrentCaption(prevFrame + ' ');
+			$(currFrame).animate({
+				'opacity' : 0,
+				'left' : '+' + TRANSITION_OFFSET
+			}, TRANSITION_DURATION, function() {	
+				$(this).css('display', 'none');
+			});
+			$(prevFrame).css('display', 'block');
+			initGlassbox(prevFrame + ' ');
+			$(prevFrame).animate({
+				'opacity' : 1,
+				'left' : '0px'
+			}, TRANSITION_DURATION, function() {
+				currFrame = prevFrame + ' ';
+				repeatAnimation();
+			});
+		}
 
 	</script>
  
@@ -219,40 +253,160 @@
 	<div id="profile">
 		<img id="thumbnail" src="img/thumb-ys.png" width="150"/>
 		<h2>Yang Shun Tay</h2>
-		<p>Design Hacker</p>
+		<p class="sub">Design Hacker</p>
 		<hr>
+		<p class="desc">I'm Yang Shun. A hacker and designer living in Mountain View. Currently exploring web development technologies.</p>
+		<p class="desc">I also go for hackathons and won several prizes.</p>
+		<br/>
+		<ul>
+			<li><a href="//www.facebook.com/yangshun" target="_blank"><i class="icon-fb"></i></a></li>
+			<li><a href="//www.twitter.com/yangshunz" target="_blank"><i class="icon-tw"></i></a></li>
+			<li><a href="//www.linkedin.com/pub/yang-shun-tay/28/8/507" target="_blank"><i class="icon-li"></i></a></li>
+		</ul>
 	</div>
 	<div id="content">
-		<header><nav>#ifihadglass</nav></header>
-		<div id="item-1" class="item">
-			<div id="frame">
-				<div id="glassbox">
-					<div id="okglass">
-						<ul>
-							<li>ok glass,</li>
-						</ul>
+		<header>
+			<nav>
+				<ul>
+					<li>#ifihadglass</li>
+					<li><a href="#">Home</a></li>
+					<li><a href="credits.html">Credits</a></li>
+				</ul>
+			</nav>
+		</header>
+		<div id="canvas">
+			<div class="frame-container">
+				<div class="frame frame-food" id="frame-1">
+					<div class="overlay">
+						<h2>#ifihadglass...</h2>
+						<a class="playbutton" href="#" onclick="startAnimation()"> </a>
 					</div>
-					<div id="glassactions">
-						<ul>
-							<li>google...</li>
-							<li>take a picture</li>
-							<li>record a video</li>
-							<li>hang out with...</li>
-							<li>record calories</li>
-						</ul>
+					<div class="glassbox">
+						<div class="okglass">
+							<ul>
+								<li>ok glass,</li>
+							</ul>
+						</div>
+						<div class="glassactions">
+							<ul>
+								<li>google...</li>
+								<li>take a picture</li>
+								<li>record a video</li>
+								<li>hang out with...</li>
+								<li>record calories</li>
+							</ul>
+						</div>
+						<div class="actioncontent">
+							<p class="title">Bento Box (2 items)</p>
+							<div style="height: 40px;">&nbsp;</div>
+							<p class="value">+680</p>
+							<hr>
+							<p class><span class="title" style="float:left">Caloric intake today:</span><span class="value" style="float:right">982</span></p>
+						</div>
+						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
-					<div id="actioncontent">
-						<p class="title">Bento Box (2 items)</p>
-						<div style="height: 40px;">&nbsp;</div>
-						<p class="value">+680</p>
-						<hr>
-						<p class><span class="title" style="float:left">Calorie intake today:</span><span class="value" style="float:right">982</span></p>
-					</div>
-					<a id="playbutton" href="#" onclick="repeatAnimation()"></a>
+					<span class="caption">Counting calories has never been easier.</span>
 				</div>
-			</div>
-			<div class="text">
-				<p>Counting calories has never been easier.</p>
+				<div class="frame frame-streets" id="frame-2">
+					<div class="glassbox">
+						<div class="okglass">
+							<ul>
+								<li>ok glass,</li>
+							</ul>
+						</div>
+						<div class="glassactions">
+							<ul>
+								<li>google...</li>
+								<li>take a picture</li>
+								<li>record a video</li>
+								<li>hang out with...</li>
+								<li>track distance</li>
+							</ul>
+						</div>
+						<div class="actioncontent">
+							<img src="img/map.png" width="220" height="42" style="margin-left: -10px; margin-top: -10px"/>
+							<p class="title">Distance walked</p>
+							<!-- <div style="height: 40px;">&nbsp;</div> -->
+							<p class="value" style="font-size: 14px">1.0 mil</p>
+							<p class="value" style="font-size: 14px">(120 cal)</p>
+							<hr>
+							<p class>
+								<span class="title" style="float:left">Total distance today:</span>
+								<span class="value" style="float:right">2.1 mil</span>
+							</p>
+						</div>
+						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+					</div>
+					<span class="caption">Distance walked for the day.</span>
+				</div>
+				<div class="frame frame-gym" id="frame-3">
+					<div class="glassbox">
+						<div class="okglass">
+							<ul>
+								<li>ok glass,</li>
+							</ul>
+						</div>
+						<div class="glassactions">
+							<ul>
+								<li>google...</li>
+								<li>take a picture</li>
+								<li>record a video</li>
+								<li>hang out with...</li>
+								<li>gym workout</li>
+							</ul>
+						</div>
+						<div class="actioncontent">
+							<p class="title">Gym workout</p>
+							<div style="height: 40px;">&nbsp;</div>
+							<p class="value">+311</p>
+							<hr>
+							<p class>
+								<span class="title" style="float:left">Calories burnt today:</span>
+								<span class="value" style="float:right">1448</span>
+							</p>
+						</div>
+						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+					</div>
+					<span class="caption">Record calories burnt during exercise.</span>
+				</div>
+				<div class="frame frame-bedroom" id="frame-4">
+					<div class="glassbox">
+						<div class="okglass">
+							<ul>
+								<li>ok glass,</li>
+							</ul>
+						</div>
+						<div class="glassactions">
+							<ul>
+								<li>google...</li>
+								<li>take a picture</li>
+								<li>record a video</li>
+								<li>hang out with...</li>
+								<li>show daily summary</li>
+							</ul>
+						</div>
+						<div class="actioncontent">
+							<p class="title">Caloric intake:</p>
+							<!-- <div style="height: 40px;">&nbsp;</div> -->
+							<p class="value">+2311</p>
+							<p class="title">Calories burnt:</p>
+							<p class="value">-2209</p>
+							<div style="height: 10px;">&nbsp;</div>
+							<hr>
+							<p class>
+								<span class="title" style="float:left">Net calories today:</span>
+								<span class="value" style="float:right">+102</span>
+							</p>
+						</div>
+						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+					</div>
+					<span class="caption">Track your daily caloric intake.</span>
+				</div>
+				<div class="text">
+					<a id="prevbutton" href="#" style="float:left" onclick="prev()">Prev</a>
+					<span>Counting calories have never been easier.</span>
+					<a id="nextbutton" href="#" style="float:right" onclick="next()">Next</a>
+				</div>
 			</div>
 		</div>
 	</div>
