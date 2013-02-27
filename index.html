@@ -159,7 +159,7 @@
 
 		var startAnimation = function() {
 			$('.overlay').fadeOut(500, function() {
-				showCurrentCaption(currFrame);
+				$(currFrame + 'p.caption').fadeIn(TRANSITION_BUTTON_FADE_DURATION);
 				okGlass();
 			});
 		}
@@ -175,6 +175,7 @@
 			$('#canvas .text span').fadeOut(0);
 			$("#prevbutton").fadeOut(0);	
 			$("#nextbutton").fadeOut(0);
+			$(currFrame + 'p.caption').fadeOut(0);
 		}
 
 		var showTransitionButtons = function() {
@@ -193,19 +194,19 @@
 			$("#nextbutton").fadeOut(TRANSITION_BUTTON_FADE_DURATION);
 		}
 
-		var showCurrentCaption = function(frame) {
-			$('#canvas .text span').fadeOut(TRANSITION_BUTTON_FADE_DURATION, 
-				function() {
-					$(this).html($(frame + 'span.caption').html());
-					$(this).fadeIn(TRANSITION_BUTTON_FADE_DURATION);
-				});
-		}
+		// var showCurrentCaption = function(frame) {
+		// 	$('#canvas .text span').fadeOut(TRANSITION_BUTTON_FADE_DURATION, 
+		// 		function() {
+		// 			$(this).html($(frame + 'span.caption').html());
+		// 			$(this).fadeIn(TRANSITION_BUTTON_FADE_DURATION);
+		// 		});
+		// }
 
 		var next = function() {
 			currIndex++;
 			hideTransitionButtons();
 			var nextFrame = '#frame-' + currIndex;
-			showCurrentCaption(nextFrame + ' ');
+			// showCurrentCaption(nextFrame + ' ');
 			$(currFrame).animate({
 				'opacity' : 0,
 				'left' : '-' + TRANSITION_OFFSET,
@@ -228,7 +229,7 @@
 			currIndex--;
 			hideTransitionButtons();
 			var prevFrame = '#frame-' + currIndex;
-			showCurrentCaption(prevFrame + ' ');
+			// showCurrentCaption(prevFrame + ' ');
 			$(currFrame).animate({
 				'opacity' : 0,
 				'left' : '+' + TRANSITION_OFFSET
@@ -305,7 +306,9 @@
 						</div>
 						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
-					<span class="caption">Counting calories has never been easier.</span>
+					<p class="caption">
+						<span>Counting calories has never been easier.</span>
+					</p>
 				</div>
 				<div class="frame frame-streets" id="frame-2">
 					<div class="glassbox">
@@ -337,7 +340,9 @@
 						</div>
 						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
-					<span class="caption">Distance walked for the day.</span>
+					<p class="caption">
+						<span>Distance walked for the day.</span>
+					</p>
 				</div>
 				<div class="frame frame-gym" id="frame-3">
 					<div class="glassbox">
@@ -367,7 +372,9 @@
 						</div>
 						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
-					<span class="caption">Record calories burnt during exercise.</span>
+					<p class="caption">
+						<span>Recording calories burnt during exercise.</span>
+					</p>
 				</div>
 				<div class="frame frame-bedroom" id="frame-4">
 					<div class="glassbox">
@@ -400,11 +407,13 @@
 						</div>
 						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
-					<span class="caption">Track your daily caloric intake.</span>
+					<p class="caption">
+						<span>Keep track of your health.</span>
+					</p>
 				</div>
 				<div class="text">
 					<a id="prevbutton" href="#" style="float:left" onclick="prev()">Prev</a>
-					<span>Counting calories have never been easier.</span>
+					<!-- <span>Counting calories have never been easier.</span> -->
 					<a id="nextbutton" href="#" style="float:right" onclick="next()">Next</a>
 				</div>
 			</div>
