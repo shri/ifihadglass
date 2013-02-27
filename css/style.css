@@ -25,7 +25,7 @@ body {
 	font-weight: 300;
 	color: rgba(51,51,51,0.6);
 	overflow: hidden;
-	background-color: #e6e6e6;
+	background-color: #fff;
 }
 
 ul {
@@ -88,6 +88,7 @@ a:hover {
 	top: 0;
 	left: 0;
 	padding: 20px;
+	padding-top: 60px;
 	width: 250px;
 	height: 100%;
 	border-right: 1px solid #e3e3e3;
@@ -95,6 +96,7 @@ a:hover {
 	z-index: 10;
 	text-align: right;
 	font-weight: 100;
+	box-shadow: 0px 1px 6px #999;
 }
 
 #profile #thumbnail {
@@ -137,16 +139,18 @@ a:hover {
 
 #content {
 	margin-left: 291px;
-	min-width: 720px;
+	min-width: 800px;
 	height: 100%;
 }
 
 #content header {
+	position: relative;
 	height: 45px;
 	border-bottom: 1px solid #e6e6e6;
 	font-size: 28px;
 	font-weight: 100;
 	background-color: #fff;
+	z-index: 1;
 	/*box-shadow: 0px 1px 6px #999;*/
 }
 
@@ -184,21 +188,13 @@ a:hover {
 }
 
 #content #canvas .text a {
-	font-size: 16px;
 	/*vertical-align: middle;*/
 	position: absolute;
 	top: 0px;
-	padding-top: 5px;
 }
 
-#prevbutton {
-	left: 0;
-	padding-left: 30px;
-}
-
-#nextbutton {
-	right: 0;
-	padding-right: 30px;
+.gallery {
+	background-color: #e6e6e6 !important;
 }
 
 .container {
@@ -208,6 +204,11 @@ a:hover {
 
 .container h2 {
 	font-weight: 500;
+	margin-bottom: 40px;
+}
+
+.container p {
+	margin-bottom: 20px;
 }
 
 .frame-container {
@@ -221,7 +222,7 @@ a:hover {
 	position: absolute;
 
 	font-family: "Roboto";
-	color: rgba(255, 255, 255, 0.6);
+	color: rgba(255, 255, 255, 0.8);
 	font-weight: 100;
 	font-size: 14px;
 
@@ -326,17 +327,45 @@ a:hover {
 	font-weight: 100;
 }
 
+.button {
+	position: absolute;
+	background-size: 50px 50px;
+	width: 50px;
+	height: 50px;
+	background-repeat: no-repeat;
+}
+
+.prevbutton {
+	top: 235px;
+	left: 0;
+	margin-left: -65px;
+	background-image: url('../img/prev-arrow.png');
+}
+
+.prevbutton:hover {
+	right: 0;
+	background-image: url('../img/prev-arrow-hover.png');
+}
+
+.nextbutton {
+	top: 235px;
+	right: 0;
+	margin-right: -65px;
+	background-image: url('../img/next-arrow.png');
+}
+
+.nextbutton:hover {
+	background-image: url('../img/next-arrow-hover.png');
+}
+
 .playbutton {
 	/*margin: 0 auto;*/
 	/*margin-top: 35%;*/
-	position: absolute;
 	top: 52.5%;
 	left: 295px;
 	display: block;
 	background-image: url('../img/play-button.png');
-	background-size: 50px 50px;
-	width: 50px;
-	height: 50px;
+
 }
 
 .playbutton:hover {
@@ -348,10 +377,6 @@ a:hover {
 	top: 35px;
 	left: 85px;
 	background-image: url('../img/repeat-button.png');
-	/*background-image: url('../img/loading.gif');*/
-	background-size: 50px 50px;
-	width: 50px;
-	height: 50px;
 	opacity: 0;
 }
 

@@ -4,14 +4,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>If I had glass</title>
     <meta name="author" content="Yang Shun Tay">
-    <meta name="copyright" content="Copyright Yang Shun Tay 2013. All Rights Reserved.">
-    <meta name="description" content="If I had glass...">
+    <meta name="copyright" content="Yang Shun Tay 2013.">
+    <meta name="description" content="An #ifihadglass entry for the Glass Explorer Program: If I had glass, I would use it to keep my health in check. I believe glass is the perfect assistant that will enable me to do that.">
     <!-- Facebook Open Graph -->
     <meta property="og:title" content="If I had glass">
-    <meta property="og:description" content="">
-    <meta property="og:site_name" content="">
+    <meta property="og:description" content="An #ifihadglass entry for the Glass Explorer Program: If I had glass, I would use it to keep my health in check. I believe glass is the perfect assistant that will enable me to do that.">
+    <meta property="og:site_name" content="If I had glass">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="">
+    <meta property="og:image" content="img/og-icon.png">
     <link href="https://roboto-webfont.googlecode.com/svn/trunk/roboto.all.css" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="img/favicon.png">
@@ -41,18 +41,38 @@
 
 		var delay = 0;
 		$(document).ready(function() {
-			// setUpNavigationEffects();
-			// hideNonActiveContent();
-			// setUpJudgesHover();
 			currIndex = 1;
 			currFrame = '#frame-1 ';
 			numberOfFrames = $('.frame').size();
 			initGlassbox();
 			setupFrames();
-			$('.playbutton').hover();
-			$(currFrame + '.repeatbutton').hover(); // to trigger loading of the hover image
-			// okGlass();
+
+			// preload hover images
+			preload([
+			    'img/next-arrow-hover.png',
+			    'img/play-button-over.png',
+			    'img/prev-arrow-hover.png',
+			    'img/repeat-button-over.png'
+			]);
+
+			// set up nav bar hiding
+			$('.frame').hover(function() {
+				var height = $(this).height();
+				$('#header').animate({'top': '-45px'},
+					300, function() {
+						console.log($(this).height());
+					})
+				}, function() {
+					$('#header').animate({'top': '0px'},
+						300);
+			})
 		});
+
+		function preload(arrayOfImages) {
+		    $(arrayOfImages).each(function(){
+		        $('<img/>')[0].src = this;
+		    });
+		}
 
 		var initGlassbox = function(frame) {
 			if (!frame) {
@@ -166,7 +186,7 @@
 
 		var setupFrames = function() {
 			$('#canvas').find('div.frame').each(function () {
-				if (!$(this).is(':first-child')) {
+				if ($(this).attr('id') != 'frame-1') {
 					$(this).css('left', '640px');
 					$(this).css('opacity', 0);
 					$(this).css('display', 'none');
@@ -254,7 +274,7 @@
 	<div id="profile">
 		<img id="thumbnail" src="img/thumb-ys.png" width="150"/>
 		<h2>Yang Shun Tay</h2>
-		<p class="sub">Design Hacker</p>
+		<p class="sub">A Design Hacker</p>
 		<hr>
 		<p class="desc">I'm Yang Shun. A hacker and designer living in Mountain View. Currently exploring web development technologies.</p>
 		<p class="desc">I also go for hackathons and won several prizes.</p>
@@ -264,9 +284,12 @@
 			<li><a href="//www.twitter.com/yangshunz" target="_blank"><i class="icon-tw"></i></a></li>
 			<li><a href="//www.linkedin.com/pub/yang-shun-tay/28/8/507" target="_blank"><i class="icon-li"></i></a></li>
 		</ul>
+		
+		<p class="desc">#ifihadglass Entry</p>
+		<p>Yang Shun Tay 2013</p>		
 	</div>
 	<div id="content">
-		<header>
+		<header id="header">
 			<nav>
 				<ul>
 					<li>#ifihadglass</li>
@@ -275,12 +298,15 @@
 				</ul>
 			</nav>
 		</header>
-		<div id="canvas">
-			<div class="frame-container">
+		<div id="canvas" class="gallery">
+			<div class="frame-container gallery">
+				<a id="prevbutton" class="button prevbutton" href="#" style="float:left" onclick="prev()"></a>
+				
+				<a id="nextbutton" class="button nextbutton" href="#" style="float:right" onclick="next()"></a>
 				<div class="frame frame-food" id="frame-1">
 					<div class="overlay">
 						<h2>#ifihadglass...</h2>
-						<a class="playbutton" href="#" onclick="startAnimation()"> </a>
+						<a class="button playbutton" href="#" onclick="startAnimation()"> </a>
 					</div>
 					<div class="glassbox">
 						<div class="okglass">
@@ -304,7 +330,7 @@
 							<hr>
 							<p class><span class="title" style="float:left">Caloric intake today:</span><span class="value" style="float:right">982</span></p>
 						</div>
-						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+						<a class="button repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
 					<p class="caption">
 						<span>Counting calories has never been easier.</span>
@@ -338,7 +364,7 @@
 								<span class="value" style="float:right">2.1 mil</span>
 							</p>
 						</div>
-						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+						<a class="button repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
 					<p class="caption">
 						<span>Distance walked for the day.</span>
@@ -370,7 +396,7 @@
 								<span class="value" style="float:right">1448</span>
 							</p>
 						</div>
-						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+						<a class="button repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
 					<p class="caption">
 						<span>Recording calories burnt during exercise.</span>
@@ -405,19 +431,26 @@
 								<span class="value" style="float:right">+102</span>
 							</p>
 						</div>
-						<a class="repeatbutton" href="#" onclick="repeatAnimation()"></a>
+						<a class="button repeatbutton" href="#" onclick="repeatAnimation()"></a>
 					</div>
 					<p class="caption">
 						<span>Keep track of your health.</span>
 					</p>
 				</div>
-				<div class="text">
-					<a id="prevbutton" href="#" style="float:left" onclick="prev()">Prev</a>
-					<!-- <span>Counting calories have never been easier.</span> -->
-					<a id="nextbutton" href="#" style="float:right" onclick="next()">Next</a>
-				</div>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-37649862-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
 </body>
 </html>
